@@ -1,0 +1,560 @@
+{
+  "info": {
+    "_postman_id": "c2b0aeea-8b88-4b72-9c85-28c5b4721512",
+    "name": "Restaurant User API",
+    "description": "Coleção Postman para testar a API de usuários do restaurante.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api/v1"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "user_id",
+      "value": "1"
+    },
+    {
+      "key": "user_email",
+      "value": "joao.silva@email.com"
+    },
+    {
+      "key": "search_nome",
+      "value": "joao"
+    },
+    {
+      "key": "page",
+      "value": "0"
+    },
+    {
+      "key": "size",
+      "value": "10"
+    },
+    {
+      "key": "restaurant_id",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json && json.token) {",
+                  "    pm.collectionVariables.set(\"token\", json.token);",
+                  "    pm.environment.set(\"token\", json.token);",
+                  "} else {",
+                  "    pm.collectionVariables.unset(\"token\");",
+                  "    pm.environment.unset(\"token\");",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@restauranthub.com\",\n  \"senha\": \"Admin@123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Criar usuário",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuário Teste\",\n  \"email\": \"novo.usuario+{{$timestamp}}@email.com\",\n  \"login\": \"novo.usuario{{$timestamp}}\",\n  \"senha\": \"Senha@123\",\n  \"tipoUsuario\": \"CLIENTE\",\n  \"telefone\": \"+55 11 98765-0000\",\n  \"enderecos\": [\n    {\n      \"tipoEndereco\": \"RESIDENCIAL\",\n      \"rua\": \"Rua das Flores\",\n      \"numero\": \"123\",\n      \"complemento\": \"Apto 45\",\n      \"bairro\": \"Vila Mariana\",\n      \"cidade\": \"São Paulo\",\n      \"estado\": \"SP\",\n      \"cep\": \"04052-010\",\n      \"principal\": true\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/users/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar usuários",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/users?page={{page}}&size={{size}}&sort=nome,asc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "{{page}}"
+                },
+                {
+                  "key": "size",
+                  "value": "{{size}}"
+                },
+                {
+                  "key": "sort",
+                  "value": "nome,asc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar por nome",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/users/search?nome={{search_nome}}&page={{page}}&size={{size}}&sort=nome,asc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "nome",
+                  "value": "{{search_nome}}"
+                },
+                {
+                  "key": "page",
+                  "value": "{{page}}"
+                },
+                {
+                  "key": "size",
+                  "value": "{{size}}"
+                },
+                {
+                  "key": "sort",
+                  "value": "nome,asc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar por e-mail",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/users/email/{{user_email}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "email",
+                "{{user_email}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Atualizar usuário",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuário Teste Atualizado\",\n  \"email\": \"{{user_email}}\",\n  \"telefone\": \"+55 11 98765-1111\",\n  \"enderecos\": [\n    {\n      \"tipoEndereco\": \"RESIDENCIAL\",\n      \"rua\": \"Rua das Flores\",\n      \"numero\": \"456\",\n      \"complemento\": \"Apto 45\",\n      \"bairro\": \"Vila Mariana\",\n      \"cidade\": \"São Paulo\",\n      \"estado\": \"SP\",\n      \"cep\": \"04052-010\",\n      \"principal\": true,\n      \"ativo\": true\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Alterar senha",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"senhaAtual\": \"Senha@123\",\n  \"novaSenha\": \"NovaSenha@456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/{{user_id}}/password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_id}}",
+                "password"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Desativar usuário",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/users/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_id}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Types",
+      "item": [
+        {
+          "name": "Listar tipos de usuário",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/user-types",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user-types"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Associar tipo ao usuário",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "url": {
+              "raw": "{{base_url}}/user-types/2/users/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "user-types",
+                "2",
+                "users",
+                "{{user_id}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Restaurants",
+      "item": [
+        {
+          "name": "Criar restaurante",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Restaurante {{$timestamp}}\",\n  \"tipoCozinha\": \"Brasileira\",\n  \"horarioFuncionamento\": \"Seg-Dom 11:00-23:00\",\n  \"donoUsuarioId\": 2,\n  \"rua\": \"Rua dos Sabores\",\n  \"numero\": \"200\",\n  \"bairro\": \"Centro\",\n  \"cidade\": \"São Paulo\",\n  \"estado\": \"SP\",\n  \"cep\": \"01001-000\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/restaurants",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "restaurants"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar restaurantes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/restaurants",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "restaurants"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Menu Items",
+      "item": [
+        {
+          "name": "Criar item de cardápio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Prato {{$timestamp}}\",\n  \"descricao\": \"Prato do dia com acompanhamento\",\n  \"preco\": 29.90,\n  \"apenasNoLocal\": false,\n  \"caminhoFoto\": \"/images/prato.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/restaurants/{{restaurant_id}}/menu-items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "restaurants",
+                "{{restaurant_id}}",
+                "menu-items"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar itens do restaurante",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/restaurants/{{restaurant_id}}/menu-items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "restaurants",
+                "{{restaurant_id}}",
+                "menu-items"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

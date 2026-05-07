@@ -1,0 +1,17 @@
+{
+  "id": "606f1d4c-9d41-4fd0-bc21-02a78a401a64",
+  "name": "Restaurant User API (local)",
+  "values": [
+    { "key": "base_url", "value": "http://localhost:8080/api/v1", "enabled": true },
+    { "key": "token", "value": "", "enabled": true },
+    { "key": "user_id", "value": "1", "enabled": true },
+    { "key": "user_email", "value": "joao.silva@email.com", "enabled": true },
+    { "key": "search_nome", "value": "joao", "enabled": true },
+    { "key": "page", "value": "0", "enabled": true },
+    { "key": "size", "value": "10", "enabled": true }
+  ],
+  "timestamp": 1733410000000,
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2025-12-05T00:00:00Z",
+  "_postman_exported_using": "Postman/11.22.0"
+}
