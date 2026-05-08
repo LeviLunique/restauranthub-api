@@ -3,6 +3,11 @@
 API REST para gestão de usuários de restaurantes, tipos de usuário, cadastro de restaurantes, itens de cardápio, autenticação com JWT e documentação OpenAPI.
 
 ## Apresentação
+- Aluno: Levi Lunique Izidio da Silva
+- Professor: Vinícius G. Mendonça
+- Disciplina: Desenvolvimento de Backend
+- Curso: Pós-graduação em Desenvolvimento de Aplicativos Móveis
+- Universidade: PUCPR — Pontifícia Universidade Católica do Paraná
 - [Vídeo de apresentação no YouTube](https://youtu.be/2aEY3cYsA84)
 
 ## Stack e requisitos
